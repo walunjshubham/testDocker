@@ -12,7 +12,7 @@ pipeline {
     stage('Build image') { 
         steps{
         script{
-        	bat 'docker build -t shubhamwalunj25/docker-project:latest'
+        	bat 'docker build -t shubhamwalunj25/docker-project:latest .'
         	}
             }
         }
