@@ -4,37 +4,30 @@ pipeline {
     maven 'MAVEN'
     }
     stages {
-     stage('Clone repository') {
-        /* Cloning the Repository to our Workspace */
-
-        checkout scm
-    }
-        stage('Build') { 
+       stage('Build') { 
             steps {
             bat 'mvn clean install'
             }
         }        
-       stage('Build image') {
-        /* This builds the actual image */
-
-        app = docker.build("shubhamwalunj25/jenkins:latest")
-    }
-
-    stage('Test image') {
-        
-        app.inside {
-            echo "Tests passed"
-        }
-    }
-
-	stage('Push image') {
-	docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
+    stage('push docker img to dockerhub') { 
+        steps{
+        	script{
+            docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+            docker.image("shubhamwalunj25/testdocker_1:${TAG}").push()
+            docker.image("shubhamwalunj25/testdocker_1:${TAG}").push("latest")
+            }
             } 
-                echo "Trying to Push Docker Build to DockerHub"
-	
-    }
+            }
+        }
+        stage('Deploy'){
+        steps{
+        	bat "docker stop testdocker_1 | true"
+        	bat "docker rm testdocker_1 | true"
+        	bat "docker run --name testdocker_1 -d -p 9004:8080 shubhamwalunj25/testdocker_1"
+        }
+        }
+		
+		
     }
     post{
     always{
