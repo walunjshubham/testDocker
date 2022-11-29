@@ -2,12 +2,15 @@ pipeline {
     agent any
     tools{
     maven 'MAVEN'
+    jdk 'jdk11'
     }
     stages {
         stage('Build') { 
             steps {
-            checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'get', url: 'https://github.com/walunjshubham/testDocker.git']]])
-            sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            sh '''
+           		echo "PATH=${PATH}"
+           		echo "M2_HOME=${M2_HOME}"
+           		'''
             }
         }        
       
