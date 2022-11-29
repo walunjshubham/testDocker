@@ -8,11 +8,7 @@ pipeline {
             steps {
                sh 'mvn clean install'
             }
-        }
-        stage('Test') { 
-           echo "maven build success"
-        }
-        
+        }        
         stage('push docker img to dockerhub') { 
         steps{
         	script{
