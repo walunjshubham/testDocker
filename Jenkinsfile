@@ -9,22 +9,22 @@ pipeline {
             bat 'mvn clean install'
             }
         }        
-    stage('push docker img to dockerhub') { 
+    stage('Build image') { 
         steps{
-        	script{
-            docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-            docker.image("shubhamwalunj25/testdocker_1:${TAG}").push()
-            docker.image("shubhamwalunj25/testdocker_1:${TAG}").push("latest")
-            }
-            } 
+        script{
+        	bat 'docker build -t shubhamwalunj25/testdocker_1'
+        	}
             }
         }
-        stage('Deploy'){
+        stage('Push image to docker hub'){
         steps{
-        	bat "docker stop testdocker_1 | true"
-        	bat "docker rm testdocker_1 | true"
-        	bat "docker run --name testdocker_1 -d -p 9004:8080 shubhamwalunj25/testdocker_1"
-        }
+ 			script{
+        	withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
+    		bat 'docker login -u shubhamwalunj25 -p ${dockerhubpwd}'
+				}
+				bat 'docker push testdocker_1'
+        	}       	
+        	 }
         }
 		
 		
