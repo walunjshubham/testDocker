@@ -12,7 +12,7 @@ pipeline {
     stage('Build image') { 
         steps{
         script{
-        	sh 'docker build -t shubhamwalunj25/testdocker_2:latest .'
+        	bat 'docker build -t shubhamwalunj25/docker-project .'
         	}
             }
         }
@@ -22,7 +22,7 @@ pipeline {
         	withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
     		bat 'docker login -u shubhamwalunj25 -p ${dockerhubpwd}'
 				}
-				sh 'docker push shubhamwalunj25/testdocker_2:latest'
+				bat 'docker push shubhamwalunj25/docker-project'
         	}       	
         	 }
         }
