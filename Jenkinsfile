@@ -18,8 +18,11 @@ pipeline {
         }
         stage('Push image to docker hub'){
         steps{
+        withCredentials([string(credentialsId: 'dockerpwd', variable: 'pwd')]) {
+    		bat "docker login -u shubhamwalunj25 -p ${pwd}"
+				}
+        
  			script{
-   				 bat 'docker login -u shubhamwalunj25 -p Shubham@2144'
 				bat 'docker push shubhamwalunj25/docker-project'
         	}       	
         	 }
@@ -27,9 +30,7 @@ pipeline {
 		 stage('Deploy'){
         steps{
         script{
-        	bat "docker stop docker-project | true"
-        	bat "docker del docker-project | true"
-        	bat "docker run --name docker-project -d -p 9004:8080 shubhamwalunj25/docker-project"
+        	bat "docker run -p 8081:8081 -d --name docker-project shubhamwalunj25/docker-project"
         	}
         }
         }
