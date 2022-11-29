@@ -24,7 +24,15 @@ pipeline {
         	}       	
         	 }
         }
-		
+		 stage('Deploy'){
+        steps{
+        script{
+        	bat "docker stop docker-project | true"
+        	bat "docker del docker-project | true"
+        	bat "docker run --name docker-project -d -p 9004:8080 shubhamwalunj25/docker-project"
+        	}
+        }
+        }
 		
     }
     post{
