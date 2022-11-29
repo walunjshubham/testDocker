@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-            checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'shubhamwalunj', url: 'https://github.com/walunjshubham/testDocker.git']]])
+            checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'get', url: 'https://github.com/walunjshubham/testDocker.git']]])
             sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
         }        
